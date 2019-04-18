@@ -7,28 +7,31 @@ const twitter = new Twitter({
 	access_token_secret: process.env.ACCESS_TOKEN_SECRET
 });
 
-const retweetIds = ['1116226971938091008'];
-twitter.get('account/verify_credentials', {
-	include_entities: false,
-	skip_status: true,
-	include_email: false
-}, (err, res) => {
-	if (err) {
-		throw err
-	}
+const retweetIds = [];
+const ERROR_TIMEOUT = 70 * 1000;
+const SUCCESS_TIMEOUT = 37 * 60 * 1000;
 
-	console.log('Authentication successful. Running bot...');
+const retweeter = () => {
+	twitter.get('account/verify_credentials', {
+		include_entities: false,
+		skip_status: true,
+		include_email: false
+	}, (err, res) => {
+		if (err) {
+			console.error("Can't login");
+			console.log(err);
 
-	const params = {
-		q: '#lifting',
-		result_type: 'recent',
-		lang: 'en',
-		count: 100,
-	};
+			setTimeout(retweeter, ERR_TIMEOUT);
+		}
 
-	const retweeter = (since_id) => {
+		const params = {
+			q: '#lifting',
+			result_type: 'recent',
+			lang: 'en',
+			count: 100,
+		};
+
 		console.log("RETWETTER IS HERE");
-		params.since_id = since_id;
 		twitter.get('search/tweets', params, (err, res) => {
 			if (err) {
 				console.error(err);
@@ -73,20 +76,20 @@ twitter.get('account/verify_credentials', {
 						if(retweetIds.indexOf(retweetId) === -1) {
 							retweetIds.push(retweetId);
 						}
-						setTimeout(retweeter,66 * 1000);
+						setTimeout(retweeter,ERROR_TIMEOUT);
 					} else if (res) {
 						retweetIds.push(retweetId);
 						console.log('retwetted');
-						setTimeout(retweeter, 35 * 60 * 1000);
+						setTimeout(retweeter, SUCCESS_TIMEOUT);
 					}
 				});
 			} else {
 				console.log('Nothing to retweet');
-				setTimeout(retweeter, 66 * 1000);
+				setTimeout(retweeter, ERROR_TIMEOUT);
 			}
 		});
-	};
+	});
+};
 
-	retweeter(undefined)
-});
+retweeter();
 
