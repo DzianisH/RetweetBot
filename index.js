@@ -10,6 +10,12 @@ const twitter = new Twitter({
 const retweetIds = [];
 const ERROR_TIMEOUT = 70 * 1000;
 const SUCCESS_TIMEOUT = 37 * 60 * 1000;
+const queries = ['#fitness', '#fitnessmotivation', '#lifting', '#gym', '#workout'];
+
+function randomElement(arr) {
+	const index = Math.floor(arr.length * Math.random());
+	return arr[index];
+}
 
 const retweeter = () => {
 	twitter.get('account/verify_credentials', {
@@ -24,8 +30,10 @@ const retweeter = () => {
 			setTimeout(retweeter, ERR_TIMEOUT);
 		}
 
+		const q = randomElement(queries);
+		console.log(q);
 		const params = {
-			q: '#lifting',
+			q: q,
 			result_type: 'recent',
 			lang: 'en',
 			count: 100,
@@ -41,7 +49,7 @@ const retweeter = () => {
 			console.log(res.statuses.length);
 			if (res.statuses.length === 0) {
 				console.log("Nothing to retweet");
-				setTimeout(retweeter, 66 * 1000);
+				setTimeout(retweeter, ERROR_TIMEOUT);
 				return;
 			}
 
@@ -54,10 +62,10 @@ const retweeter = () => {
 				.filter(status => !status.retweeted_status)
 				.filter(status => retweetIds.indexOf(status.id_str) === -1)
 				.map(status => {
-					status.popularity = (status.retweet_count + status.favorite_count) / (status.user.followers_count + 2);
+					status.popularity = (status.retweet_count + status.favorite_count) / (Math.log(status.user.followers_count + 1) + 2);
 					return status;
 				})
-				.filter(status => status.popularity > 0.001);
+				.filter(status => status.popularity > 0);
 
 			if (statuses.length > 0) {
 				statuses.sort((status1, status2) => status2.popularity - status1.popularity);
