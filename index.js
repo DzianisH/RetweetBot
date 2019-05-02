@@ -27,7 +27,7 @@ const retweeter = () => {
 			console.error("Can't login");
 			console.log(err);
 
-			setTimeout(retweeter, ERR_TIMEOUT);
+			setTimeout(retweeter, ERROR_TIMEOUT);
 		}
 
 		const q = randomElement(queries);
