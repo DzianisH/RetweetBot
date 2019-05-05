@@ -1,8 +1,6 @@
 const waterfall = require('async/waterfall');
 const tasks = require('./tasks');
-
-const ERROR_TIMEOUT = 70 * 1000;
-const SUCCESS_TIMEOUT = 37 * 60 * 1000;
+const config = require('./config');
 
 const botLoop = () => {
 	waterfall([
@@ -13,9 +11,9 @@ const botLoop = () => {
 	], function (err) {
 		if (err) {
 			console.error(err);
-			setTimeout(botLoop, ERROR_TIMEOUT);
+			setTimeout(botLoop, config.errorTimeout);
 		} else {
-			setTimeout(botLoop, SUCCESS_TIMEOUT);
+			setTimeout(botLoop, config.successTimeout);
 		}
 	});
 };

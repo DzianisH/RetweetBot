@@ -1,14 +1,8 @@
 const Twitter = require('twit');
+const config = require('./config');
 
-const twitter = new Twitter({
-	consumer_key: process.env.CONSUMENR_KEY,
-	consumer_secret: process.env.CONSUMENR_SECRET,
-	access_token: process.env.ACCESS_TOKEN,
-	access_token_secret: process.env.ACCESS_TOKEN_SECRET
-});
-const queries = ['#fitness', '#fitnessmotivation', '#lifting', '#gym', '#workout'];
-
-let rtIdList = ['1124725709807734786'];
+const twitter = new Twitter(config.twitter);
+let rtIdList = [];
 
 const randomElement = (arr) => {
 	const index = Math.floor(arr.length * Math.random());
@@ -20,7 +14,7 @@ const loginTask = (callback) => {
 		include_entities: false,
 		skip_status: true,
 		include_email: false
-	}, (err, res) => {
+	}, (err) => {
 		if (err) {
 			console.error("Can't login");
 		}
@@ -30,10 +24,10 @@ const loginTask = (callback) => {
 
 const fetchTweetsTask = (callback) => {
 	const params = {
-		q: randomElement(queries),
-		result_type: 'recent',
-		lang: 'en',
-		count: 100,
+		q: randomElement(config.hashTags),
+		result_type: config.resultType,
+		lang: config.lang,
+		count: config.count,
 	};
 	twitter.get('search/tweets', params, (err, res) => {
 		if (err) {
@@ -52,7 +46,8 @@ const filterTweetsTask = (res, callback) => {
 		.filter(status => !status.retweeted_status)
 		.filter(status => rtIdList.indexOf(status.id_str) === -1)
 		.map(status => {
-			status.popularity = (status.retweet_count + status.favorite_count) / (Math.log(status.user.followers_count + 1) + 2);
+			status.popularity = (status.retweet_count + status.favorite_count) /
+				(Math.log(status.user.followers_count + 1) + 1);
 			return status;
 		})
 		.filter(status => status.popularity > 0);
@@ -62,26 +57,25 @@ const filterTweetsTask = (res, callback) => {
 	}
 
 	statuses.sort((status1, status2) => status2.popularity - status1.popularity);
-	const retweetId = statuses[0].id_str;
-	console.log("Gonna retweet " +
-		"http://twitter.com/" + statuses[0].user.screen_name + "/status/" + retweetId +
-		"  " + statuses[0].popularity);
-
-	return callback(null, retweetId);
+	return callback(null, statuses[0]);
 };
 
-const retweetTask = (retweetId, callback) => {
+const retweetTask = (tweet, callback) => {
 	twitter.post('statuses/retweet/:id', {
-		id: retweetId
+		id: tweet.id_str
 	}, (err, res) => {
+		const tweetLink = "http://twitter.com/" + tweet.user.screen_name + "/status/" + tweet.id_str;
+
 		if (err) {
-			console.error("Can't retweet " + retweetId);
+			console.error("Can't retweet " + tweetLink);
+		} else {
+			console.log("Retweeted " + tweetLink);
 		}
 
-		if(rtIdList.indexOf(retweetId) === -1) {
-			rtIdList.push(retweetId);
+		if(rtIdList.indexOf(tweet.id_str) === -1) {
+			rtIdList.push(tweet.id_str);
 		}
-		if (rtIdList.length > 151) {
+		if (rtIdList.length > 151) {// magic numbers is ok
 			rtIdList = rtIdList.slice(rtIdList.length - 50, rtIdList.length);
 		}
 		return callback(err, res);
