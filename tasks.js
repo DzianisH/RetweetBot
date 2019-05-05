@@ -102,9 +102,9 @@ const quoteTask = (tweet, hashTag, callback) => {
 	}, (err, res) => {
 
 		if (err) {
-			console.error("Can't retweet " + tweetLink);
+			console.error("Can't quote" + tweetLink);
 		} else {
-			console.log("Retweeted " + tweetLink);
+			console.log("Quoted " + tweetLink);
 		}
 
 		if(rtIdList.indexOf(tweet.id_str) === -1) {
