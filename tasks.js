@@ -9,6 +9,17 @@ const randomElement = (arr) => {
 	return arr[index];
 };
 
+const createQuoteMessage = (tweet, hashTag) => {
+	const login = tweet.user.screen_name;
+	return randomElement([
+		'Check this out, ' + hashTag + ' tweet from @' + login + '.',
+		'Take a look at @' + login + "'s " + hashTag + " post!",
+		'One more ' + hashTag + ' tweet!',
+		'@' + login + ' posted ' + hashTag + ' tweet today.',
+		hashTag + ' update from @' + login + "."
+	]);
+};
+
 const loginTask = (callback) => {
 	twitter.get('account/verify_credentials', {
 		include_entities: false,
@@ -23,8 +34,9 @@ const loginTask = (callback) => {
 };
 
 const fetchTweetsTask = (callback) => {
+	const hashTag = randomElement(config.hashTags);
 	const params = {
-		q: randomElement(config.hashTags),
+		q: hashTag,
 		result_type: config.resultType,
 		lang: config.lang,
 		count: config.count,
@@ -33,11 +45,11 @@ const fetchTweetsTask = (callback) => {
 		if (err) {
 			console.error("Can't get latest tweets");
 		}
-		return callback(err, res);
+		return callback(err, res, hashTag);
 	});
 };
 
-const filterTweetsTask = (res, callback) => {
+const filterTweetsTask = (res, hashTag, callback) => {
 	const statuses = res.statuses
 		.filter(status => !!status)
 		.filter(status => !status.possibly_sensitive)
@@ -58,10 +70,10 @@ const filterTweetsTask = (res, callback) => {
 	}
 
 	statuses.sort((status1, status2) => status2.popularity - status1.popularity);
-	return callback(null, statuses[0]);
+	return callback(null, statuses[0], hashTag);
 };
 
-const retweetTask = (tweet, callback) => {
+const retweetTask = (tweet, hashTag, callback) => {
 	twitter.post('statuses/retweet/:id', {
 		id: tweet.id_str
 	}, (err, res) => {
@@ -83,9 +95,32 @@ const retweetTask = (tweet, callback) => {
 	});
 };
 
+const quoteTask = (tweet, hashTag, callback) => {
+	const tweetLink = "http://twitter.com/" + tweet.user.screen_name + "/status/" + tweet.id_str;
+	twitter.post('statuses/update', {
+		status: createQuoteMessage(tweet, hashTag) + '\n' + tweetLink ,
+	}, (err, res) => {
+
+		if (err) {
+			console.error("Can't retweet " + tweetLink);
+		} else {
+			console.log("Retweeted " + tweetLink);
+		}
+
+		if(rtIdList.indexOf(tweet.id_str) === -1) {
+			rtIdList.push(tweet.id_str);
+		}
+		if (rtIdList.length > 151) {// magic numbers is ok
+			rtIdList = rtIdList.slice(rtIdList.length - 50, rtIdList.length);
+		}
+		return callback(err, res);
+	});
+};
+
 module.exports = {
 	loginTask: loginTask,
 	fetchTweetsTask: fetchTweetsTask,
 	filterTweetsTask: filterTweetsTask,
-	retweetTask: retweetTask
+	retweetTask: retweetTask,
+	quoteTask: quoteTask
 };

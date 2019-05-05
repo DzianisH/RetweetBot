@@ -17,7 +17,8 @@ const configs = {
 	count: 100,
 	// ms
 	errorTimeout: 71 * 1000,
-	successTimeout: 41 * 60 * 1000
+	successTimeout: 41 * 60 * 1000,
+	quoteRate: 0.25 // probability
 };
 
 console.log("Use the following configs");
