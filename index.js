@@ -1,102 +1,24 @@
-const Twitter = require('twit');
+const waterfall = require('async/waterfall');
+const tasks = require('./tasks');
 
-const twitter = new Twitter({
-	consumer_key: process.env.CONSUMENR_KEY,
-	consumer_secret: process.env.CONSUMENR_SECRET,
-	access_token: process.env.ACCESS_TOKEN,
-	access_token_secret: process.env.ACCESS_TOKEN_SECRET
-});
-
-const retweetIds = [];
 const ERROR_TIMEOUT = 70 * 1000;
 const SUCCESS_TIMEOUT = 37 * 60 * 1000;
-const queries = ['#fitness', '#fitnessmotivation', '#lifting', '#gym', '#workout'];
 
-function randomElement(arr) {
-	const index = Math.floor(arr.length * Math.random());
-	return arr[index];
-}
-
-const retweeter = () => {
-	twitter.get('account/verify_credentials', {
-		include_entities: false,
-		skip_status: true,
-		include_email: false
-	}, (err, res) => {
+const botLoop = () => {
+	waterfall([
+		tasks.loginTask,
+		tasks.fetchTweetsTask,
+		tasks.filterTweetsTask,
+		tasks.retweetTask
+	], function (err) {
 		if (err) {
-			console.error("Can't login");
-			console.log(err);
-
-			setTimeout(retweeter, ERROR_TIMEOUT);
+			console.error(err);
+			setTimeout(botLoop, ERROR_TIMEOUT);
+		} else {
+			setTimeout(botLoop, SUCCESS_TIMEOUT);
 		}
-
-		const q = randomElement(queries);
-		console.log(q);
-		const params = {
-			q: q,
-			result_type: 'recent',
-			lang: 'en',
-			count: 100,
-		};
-
-		console.log("RETWETTER IS HERE");
-		twitter.get('search/tweets', params, (err, res) => {
-			if (err) {
-				console.error(err);
-				return;
-			}
-
-			console.log(res.statuses.length);
-			if (res.statuses.length === 0) {
-				console.log("Nothing to retweet");
-				setTimeout(retweeter, ERROR_TIMEOUT);
-				return;
-			}
-
-			let statuses = res.statuses;
-			statuses = statuses
-				.filter(status => !status.possibly_sensitive)
-				.filter(status => !status.retweeted)
-				.filter(status => status.entities.urls.length === 0)
-				.filter(status => !status.in_reply_to_status_id && !status.in_reply_to_user_id && !status.in_reply_to_screen_name)
-				.filter(status => !status.retweeted_status)
-				.filter(status => retweetIds.indexOf(status.id_str) === -1)
-				.map(status => {
-					status.popularity = (status.retweet_count + status.favorite_count) / (Math.log(status.user.followers_count + 1) + 2);
-					return status;
-				})
-				.filter(status => status.popularity > 0);
-
-			if (statuses.length > 0) {
-				statuses.sort((status1, status2) => status2.popularity - status1.popularity);
-				const retweetId = statuses[0].id_str;
-				console.log("http://twitter.com/" + statuses[0].user.screen_name + "/status/" + retweetId);
-				console.log(statuses[0].popularity);
-
-
-				twitter.post('statuses/retweet/:id', {
-					id: retweetId
-				}, (err, res) => {
-					if (err) {
-						console.error('Something went wrong while RETWEETING... Duplication maybe...');
-						console.error(err);
-						if(retweetIds.indexOf(retweetId) === -1) {
-							retweetIds.push(retweetId);
-						}
-						setTimeout(retweeter,ERROR_TIMEOUT);
-					} else if (res) {
-						retweetIds.push(retweetId);
-						console.log('retwetted');
-						setTimeout(retweeter, SUCCESS_TIMEOUT);
-					}
-				});
-			} else {
-				console.log('Nothing to retweet');
-				setTimeout(retweeter, ERROR_TIMEOUT);
-			}
-		});
 	});
 };
 
-retweeter();
+botLoop();
 
