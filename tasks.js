@@ -39,6 +39,7 @@ const fetchTweetsTask = (callback) => {
 
 const filterTweetsTask = (res, callback) => {
 	const statuses = res.statuses
+		.filter(status => !!status)
 		.filter(status => !status.possibly_sensitive)
 		.filter(status => !status.retweeted)
 		.filter(status => status.entities.urls.length === 0)
@@ -52,8 +53,8 @@ const filterTweetsTask = (res, callback) => {
 		})
 		.filter(status => status.popularity > 0);
 
-	if (res.statuses.length === 0) {
-		return callback("Nothing to retweet");
+	if (statuses.length === 0) {
+		return callback(new Error("Nothing to retweet"));
 	}
 
 	statuses.sort((status1, status2) => status2.popularity - status1.popularity);
