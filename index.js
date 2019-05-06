@@ -11,12 +11,11 @@ const botLoop = () => {
 	], function (err) {
 		if (err) {
 			console.error(err);
-			setTimeout(botLoop, config.errorTimeout);
+			setTimeout(botLoop, config.errorDelay);
 		} else {
-			setTimeout(botLoop, config.successTimeout);
+			setTimeout(botLoop, config.successDelay);
 		}
 	});
 };
 
-botLoop();
-
+setTimeout(() => botLoop(), config.startupDelay);

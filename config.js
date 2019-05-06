@@ -15,10 +15,11 @@ const configs = {
 	resultType: 'recent',
 	lang: 'en',
 	count: 100,
+	quoteRate: 0.15, // probability
 	// ms
-	errorTimeout: 71 * 1000,
-	successTimeout: 41 * 60 * 1000,
-	quoteRate: 0.25 // probability
+	errorDelay: 71 * 1000,
+	successDelay: 41 * 60 * 1000,
+	startupDelay: 1
 };
 
 console.log("Use the following configs");
