@@ -9,16 +9,35 @@ const randomElement = (arr) => {
 	return arr[index];
 };
 
-const createQuoteMessage = (tweet, hashTag) => {
+function createQuote(tweet) {
+	return createQuoteMessage(tweet)
+		+ '\n' + createQuoteHashTags(tweet)
+		+ '\n' + createTweetLink(tweet);
+}
+
+const createQuoteHashTags = (status) => {
+	const hashTags = status.entities.hashtags;
+	let str = "";
+	for (let i = 0; i < hashTags.length; ++i) {
+		str += "#" + hashTags[i].text + " ";
+	}
+	return str.trim();
+};
+
+const createQuoteMessage = (tweet) => {
 	const login = tweet.user.screen_name;
 	return randomElement([
-		'Check this out, ' + hashTag + ' tweet from @' + login + '.',
-		'Take a look at @' + login + "'s " + hashTag + " post!",
-		'One more ' + hashTag + ' tweet!',
-		'@' + login + ' posted ' + hashTag + ' tweet today.',
-		hashTag + ' update from @' + login + "."
+		'Check @' + login + ' tweet out!',
+		'Take a look at @' + login + "'s post!",
+		'One more awesome tweet!',
+		'@' + login + ' posted tweet today.',
+		'Update from @' + login + "."
 	]);
 };
+
+function createTweetLink(tweet) {
+	return "http://twitter.com/" + tweet.user.screen_name + "/status/" + tweet.id_str;
+}
 
 const loginTask = (callback) => {
 	twitter.get('account/verify_credentials', {
@@ -45,11 +64,11 @@ const fetchTweetsTask = (callback) => {
 		if (err) {
 			console.error("Can't get latest tweets");
 		}
-		return callback(err, res, hashTag);
+		return callback(err, res);
 	});
 };
 
-const filterTweetsTask = (res, hashTag, callback) => {
+const filterTweetsTask = (res, callback) => {
 	const statuses = res.statuses
 		.filter(status => !!status)
 		.filter(status => !status.possibly_sensitive)
@@ -70,10 +89,10 @@ const filterTweetsTask = (res, hashTag, callback) => {
 	}
 
 	statuses.sort((status1, status2) => status2.popularity - status1.popularity);
-	return callback(null, statuses[0], hashTag);
+	return callback(null, statuses[0]);
 };
 
-const retweetTask = (tweet, hashTag, callback) => {
+const retweetTask = (tweet, callback) => {
 	twitter.post('statuses/retweet/:id', {
 		id: tweet.id_str
 	}, (err, res) => {
@@ -95,16 +114,15 @@ const retweetTask = (tweet, hashTag, callback) => {
 	});
 };
 
-const quoteTask = (tweet, hashTag, callback) => {
-	const tweetLink = "http://twitter.com/" + tweet.user.screen_name + "/status/" + tweet.id_str;
+const quoteTask = (tweet, callback) => {
 	twitter.post('statuses/update', {
-		status: createQuoteMessage(tweet, hashTag) + '\n' + tweetLink ,
+		status: createQuote(tweet),
 	}, (err, res) => {
 
 		if (err) {
-			console.error("Can't quote" + tweetLink);
+			console.error("Can't quote" + createTweetLink(tweet));
 		} else {
-			console.log("Quoted " + tweetLink);
+			console.log("Quoted " + createTweetLink(tweet));
 		}
 
 		if(rtIdList.indexOf(tweet.id_str) === -1) {
