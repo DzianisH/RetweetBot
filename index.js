@@ -1,21 +1,26 @@
 const waterfall = require('async/waterfall');
-const tasks = require('./tasks');
-const config = require('./config');
+const Tasks = require('./tasks').Tasks;
+const configs = require('./config');
 
-const botLoop = () => {
-	waterfall([
-		tasks.loginTask,
-		tasks.fetchTweetsTask,
-		tasks.filterTweetsTask,
-		tasks.repostTask,
-	], function (err) {
-		if (err) {
-			console.error(err);
-			setTimeout(botLoop, config.errorDelay);
-		} else {
-			setTimeout(botLoop, config.successDelay);
-		}
-	});
-};
 
-setTimeout(() => botLoop(), config.startupDelay);
+configs.forEach(config => {
+	const tasks = new Tasks(config);
+
+	const botLoop = () => {
+		waterfall([
+			tasks.loginTask,
+			tasks.fetchTweetsTask,
+			tasks.filterTweetsTask,
+			tasks.repostTask,
+		], function (err) {
+			if (err) {
+				tasks.err(err);
+				setTimeout(botLoop, config.errorDelay);
+			} else {
+				setTimeout(botLoop, config.successDelay);
+			}
+		});
+	};
+
+	setTimeout(() => botLoop(), config.startupDelay);
+});

@@ -14,7 +14,7 @@ export class Tasks {
 			include_email: false
 		}, (err) => {
 			if (err) {
-				this.err("Can't login");
+				this.err(null, "Can't login");
 			}
 			return callback(err);
 		});
@@ -31,7 +31,7 @@ export class Tasks {
 
 		this.twitter.get('search/tweets', params, (err, res) => {
 			if (err) {
-				this.err("Can't get latest tweets");
+				this.err(null, "Can't get latest tweets");
 			}
 			return callback(err, res);
 		});
@@ -75,7 +75,7 @@ export class Tasks {
 		}, (err, res) => {
 
 			if (err) {
-				this.err("Can't retweet " + createTweetLink(tweet));
+				this.err(null, "Can't retweet " + createTweetLink(tweet));
 			} else {
 				this.log("Retweeted " + createTweetLink(tweet));
 			}
@@ -87,11 +87,11 @@ export class Tasks {
 
 	quoteTask(tweet, callback) {
 		this.twitter.post('statuses/update', {
-			status: createQuote(tweet),
+			status: this.createQuote(tweet),
 		}, (err, res) => {
 
 			if (err) {
-				this.err("Can't quote " + createTweetLink(tweet));
+				this.err(null, "Can't quote " + createTweetLink(tweet));
 			} else {
 				this.log("Quoted " + createTweetLink(tweet));
 			}
@@ -110,6 +110,17 @@ export class Tasks {
 		}
 	}
 
+	createQuote(tweet) {
+		return this.createQuoteMessage(tweet)
+			+ '\n' + createQuoteHashTags(tweet)
+			+ '\n' + createTweetLink(tweet);
+	};
+
+	createQuoteMessage(tweet) {
+		const login = tweet.user.screen_name; // used
+		return randomElement(this.config.quoteProducerList)();
+	};
+
 	// will redo later
 	log(text) {
 		if (text) {
@@ -127,12 +138,6 @@ export class Tasks {
 	}
 }
 
-const createQuote = (tweet) => {
-	return createQuoteMessage(tweet)
-		+ '\n' + createQuoteHashTags(tweet)
-		+ '\n' + createTweetLink(tweet);
-};
-
 const createQuoteHashTags = (status) => {
 	const hashTags = status.entities.hashtags;
 	let str = "";
@@ -140,17 +145,6 @@ const createQuoteHashTags = (status) => {
 		str += "#" + hashTags[i].text + " ";
 	}
 	return str.trim();
-};
-
-const createQuoteMessage = (tweet) => {
-	const login = tweet.user.screen_name;
-	return randomElement([
-		'Check @' + login + ' tweet out!',
-		'Take a look at @' + login + "'s post!",
-		'One more awesome tweet!',
-		'@' + login + ' posted tweet today.',
-		'Update from @' + login + "."
-	]);
 };
 
 function createTweetLink(tweet) {
