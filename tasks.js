@@ -51,7 +51,7 @@ export class Tasks {
 					(Math.log(status.user.followers_count + 1) + 1);
 				return status;
 			})
-			.filter(status => status.popularity > 0);
+			.filter(status => status.popularity >= this.config.minPopularity);
 
 		if (statuses.length === 0) {
 			return callback("Nothing to retweet");

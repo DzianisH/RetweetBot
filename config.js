@@ -10,6 +10,8 @@ const configs = [
 		},
 		hashTags: '#fitness #fitnessmotivation #lifting #gym #workout'.split(' '),
 		maxUrlsCount: 1,
+		minPopularity: 0.1,
+		// minQuotePopularity: 1.8,
 		resultType: 'recent',
 		lang: 'en',
 		count: 100,
@@ -23,7 +25,7 @@ const configs = [
 		],
 		// ms
 		errorDelay: 71 * 1000,
-		successDelay: 41 * 60 * 1000,
+		successDelay: 39 * 60 * 1000,
 		startupDelay: 1
 	},
 	{
@@ -37,6 +39,8 @@ const configs = [
 		},
 		hashTags: '#lovefood #recipe #recipe'.split(' '),
 		maxUrlsCount: 0,
+		minPopularity: 0.1,
+		// minQuotePopularity: 1.8,
 		resultType: 'recent',
 		lang: 'en',
 		count: 100,
