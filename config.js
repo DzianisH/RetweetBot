@@ -38,7 +38,7 @@ const configs = [
 			access_token: process.env.COOK_ACCESS_TOKEN || '',
 			access_token_secret: process.env.COOK_ACCESS_TOKEN_SECRET || ''
 		},
-		hashTags: '#lovefood #recipe #recipes'.split(' '),
+		hashTags: '#lovefood #recipe #recipes #cooking'.split(' '),
 		maxUrlsCount: 1,
 		minPopularity: 0.1,
 		minQuotePopularity: estimatePopularity(10, 100),
