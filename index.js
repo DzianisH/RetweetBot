@@ -1,17 +1,16 @@
 const waterfall = require('async/waterfall');
-const Tasks = require('./tasks').Tasks;
+const Tasks = require('./tasks');
 const configs = require('./config');
 
 
 configs.forEach(config => {
 	const tasks = new Tasks(config);
-
 	const botLoop = () => {
 		waterfall([
-			tasks.loginTask,
-			tasks.fetchTweetsTask,
-			tasks.filterTweetsTask,
-			tasks.repostTask,
+			tasks.loginTask.bind(tasks),
+			tasks.fetchTweetsTask.bind(tasks),
+			tasks.filterTweetsTask.bind(tasks),
+			tasks.repostTask.bind(tasks),
 		], function (err) {
 			if (err) {
 				tasks.err(err);

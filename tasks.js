@@ -1,6 +1,6 @@
 const Twitter = require('twit');
 
-export class Tasks {
+const Tasks = class Tasks {
 	constructor(config) {
 		this.config = config;
 		this.twitter = new Twitter(this.config.twitter);
@@ -62,7 +62,7 @@ export class Tasks {
 	};
 
 	repostTask(tweet, callback) {
-		if (Math.random() < this.config.quoteRate) {
+		if (tweet.popularity >= this.config.minQuotePopularity && Math.random() < this.config.quoteRate) {
 			this.quoteTask(tweet, callback);
 		} else {
 			this.retweetTask(tweet, callback);
@@ -118,7 +118,7 @@ export class Tasks {
 
 	createQuoteMessage(tweet) {
 		const login = tweet.user.screen_name; // used
-		return randomElement(this.config.quoteProducerList)();
+		return randomElement(this.config.quoteProducerList)(login);
 	};
 
 	// will redo later
@@ -129,14 +129,12 @@ export class Tasks {
 	}
 
 	err(err, text) {
-		if (text) {
-			console.error(this.config.name + ' ' + text);
-		}
+		console.error(this.config.name + ' ' + (text || ''));
 		if (err) {
 			console.error(err);
 		}
 	}
-}
+};
 
 const createQuoteHashTags = (status) => {
 	const hashTags = status.entities.hashtags;
@@ -147,11 +145,13 @@ const createQuoteHashTags = (status) => {
 	return str.trim();
 };
 
-function createTweetLink(tweet) {
+const createTweetLink = (tweet) => {
 	return "http://twitter.com/" + tweet.user.screen_name + "/status/" + tweet.id_str;
-}
+};
 
 const randomElement = (arr) => {
 	const index = Math.floor(arr.length * Math.random());
 	return arr[index];
 };
+
+module.exports = Tasks;
