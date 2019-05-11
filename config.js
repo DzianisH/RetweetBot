@@ -5,6 +5,8 @@ const accessTokenSecretConfig = process.env.ACCESS_TOKEN_SECRET || "";
 const hashTagsConfig = process.env.HASH_TAGS || '';
 
 const configs = {
+	skip: false,
+	name: 'fitness',
 	twitter: {
 		consumer_key: consumerKeyConfig,
 		consumer_secret: consumerSecretConfig,
@@ -12,6 +14,7 @@ const configs = {
 		access_token_secret: accessTokenSecretConfig
 	},
 	hashTags: hashTagsConfig.split(' '),
+	maxUrlsCount: 0,
 	resultType: 'recent',
 	lang: 'en',
 	count: 100,

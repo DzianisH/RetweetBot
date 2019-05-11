@@ -73,7 +73,7 @@ const filterTweetsTask = (res, callback) => {
 		.filter(status => !!status)
 		.filter(status => !status.possibly_sensitive)
 		.filter(status => !status.retweeted)
-		.filter(status => status.entities.urls.length === 0)
+		.filter(status => status.entities.urls.length <= config.maxUrlsCount)
 		.filter(status => !status.in_reply_to_status_id && !status.in_reply_to_user_id && !status.in_reply_to_screen_name)
 		.filter(status => !status.retweeted_status)
 		.filter(status => rtIdList.indexOf(status.id_str) === -1)
@@ -90,6 +90,14 @@ const filterTweetsTask = (res, callback) => {
 
 	statuses.sort((status1, status2) => status2.popularity - status1.popularity);
 	return callback(null, statuses[0]);
+};
+
+const repostTask = (tweet, callback) => {
+	if (Math.random() < config.quoteRate) {
+		quoteTask(tweet, callback);
+	} else {
+		retweetTask(tweet, callback);
+	}
 };
 
 const retweetTask = (tweet, callback) => {
@@ -139,6 +147,7 @@ module.exports = {
 	loginTask: loginTask,
 	fetchTweetsTask: fetchTweetsTask,
 	filterTweetsTask: filterTweetsTask,
+	repostTask: repostTask,
 	retweetTask: retweetTask,
 	quoteTask: quoteTask
 };

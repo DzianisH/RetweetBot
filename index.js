@@ -7,7 +7,7 @@ const botLoop = () => {
 		tasks.loginTask,
 		tasks.fetchTweetsTask,
 		tasks.filterTweetsTask,
-		Math.random() < config.quoteRate ? tasks.quoteTask : tasks.retweetTask
+		tasks.repostTask,
 	], function (err) {
 		if (err) {
 			console.error(err);
