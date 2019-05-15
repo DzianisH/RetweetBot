@@ -26,7 +26,7 @@ const configs = [
 		],
 		// ms
 		errorDelay: 71 * 1000,
-		successDelay: 39 * 60 * 1000,
+		successDelay: 42 * 60 * 1000,
 		startupDelay: 1
 	},
 	{
@@ -54,8 +54,32 @@ const configs = [
 		],
 		// ms
 		errorDelay: 63 * 1000,
-		successDelay: 89 * 60 * 1000,
+		successDelay: 83 * 60 * 1000,
 		startupDelay: 111
+	},
+	{
+		skip: false,
+		name: 'travel_blogger',
+		twitter: {
+			consumer_key: process.env.TRAVEL_CONSUMENR_KEY || '',
+			consumer_secret: process.env.TRAVEL_CONSUMENR_SECRET || '',
+			access_token: process.env.TRAVEL_ACCESS_TOKEN || '',
+			access_token_secret: process.env.TRAVEL_ACCESS_TOKEN_SECRET || ''
+		},
+		hashTags: '#travelblogger #travelblog #travel #traveling'.split(' '),
+		maxUrlsCount: 1,
+		minPopularity: 0.1,
+		minQuotePopularity: estimatePopularity(10, 100),
+		resultType: 'recent',
+		lang: 'en',
+		count: 100,
+		quoteRate: 0,
+		quoteProducerList: [
+		],
+		// ms
+		errorDelay: 63 * 1000,
+		successDelay: 63 * 60 * 1000,
+		startupDelay: 222
 	}
 ].filter(config => !config.skip);
 
