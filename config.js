@@ -8,7 +8,7 @@ const configs = [
 			access_token: process.env.FIT_ACCESS_TOKEN || '',
 			access_token_secret: process.env.FIT_ACCESS_TOKEN_SECRET || ''
 		},
-		hashTags: '#fitness #fitnessmotivation #lifting #gym #workout'.split(' '),
+		hashTags: '#fitness #fitnessmotivation #lifting #gym #workout #bodybuilding'.split(' '),
 		maxUrlsCount: 0,
 		minPopularity: 0.1,
 		minQuotePopularity: estimatePopularity(7, 100),
@@ -27,7 +27,7 @@ const configs = [
 		// ms
 		errorDelay: 71 * 1000,
 		successDelay: 42 * 60 * 1000,
-		startupDelay: 1
+		startupDelay: 0
 	},
 	{
 		skip: false,
@@ -55,7 +55,7 @@ const configs = [
 		// ms
 		errorDelay: 63 * 1000,
 		successDelay: 83 * 60 * 1000,
-		startupDelay: 111
+		startupDelay: 1001
 	},
 	{
 		skip: false,
@@ -79,7 +79,31 @@ const configs = [
 		// ms
 		errorDelay: 63 * 1000,
 		successDelay: 63 * 60 * 1000,
-		startupDelay: 222
+		startupDelay: 2002
+	},
+	{
+		skip: false,
+		name: 'yoga',
+		twitter: {
+			consumer_key: process.env.YOGA_CONSUMENR_KEY || '',
+			consumer_secret: process.env.YOGA_CONSUMENR_SECRET || '',
+			access_token: process.env.YOGA_ACCESS_TOKEN || '',
+			access_token_secret: process.env.YOGA_ACCESS_TOKEN_SECRET || ''
+		},
+		hashTags: '#yoga #yogi #meditation'.split(' '),
+		maxUrlsCount: 1,
+		minPopularity: estimatePopularity(2, 100),
+		minQuotePopularity: estimatePopularity(10, 100),
+		resultType: 'recent',
+		lang: 'en',
+		count: 100,
+		quoteRate: 0,
+		quoteProducerList: [
+		],
+		// ms
+		errorDelay: 63 * 1000,
+		successDelay: 38 * 60 * 1000,
+		startupDelay: 3003
 	}
 ].filter(config => !config.skip);
 
