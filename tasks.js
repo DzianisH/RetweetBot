@@ -124,12 +124,12 @@ const Tasks = class Tasks {
 	// will redo later
 	log(text) {
 		if (text) {
-			console.log(this.config.name + ' ' + text);
+			console.log(new Date().toISOString() + ' ' +this.config.name + ' ' + text);
 		}
 	}
 
 	err(err, text) {
-		console.error(this.config.name + ' ' + (text || ''));
+		console.error(new Date().toISOString() + ' ' + this.config.name + ' ' + (text || ''));
 		if (err) {
 			console.error(err);
 		}
