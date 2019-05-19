@@ -1,4 +1,7 @@
+const fs = require('fs');
 const Twitter = require('twit');
+
+const logToConsole = true;
 
 const Tasks = class Tasks {
 	constructor(config) {
@@ -124,14 +127,35 @@ const Tasks = class Tasks {
 	// will redo later
 	log(text) {
 		if (text) {
-			console.log(new Date().toISOString() + ' ' +this.config.name + ' ' + text);
+			const message = new Date().toISOString() + ' ' +this.config.name + ' ' + text;
+			if (logToConsole) console.log(message);
+			fs.appendFile('info.log', message + "\n", (err) => {
+				if (err) {
+					console.error(err);
+					this.err(err, "Can't log info message to file.");
+				}
+			});
 		}
 	}
 
 	err(err, text) {
-		console.error(new Date().toISOString() + ' ' + this.config.name + ' ' + (text || ''));
+		const message = new Date().toISOString() + ' ' + this.config.name + ' ' + (text || '');
+		if(logToConsole) console.error(message);
+		fs.appendFile('error.log', message + "\n",  (fsErr) => {
+			if (fsErr) {
+				console.error("Can't log error");
+				console.error(fsErr);
+			}
+		});
+
 		if (err) {
-			console.error(err);
+			if (logToConsole) console.error(err);
+			fs.appendFile('error.log', JSON.stringify(err) + "\n",  (fsErr) => {
+				if (fsErr) {
+					console.error("Can't log error");
+					console.error(fsErr);
+				}
+			});
 		}
 	}
 };

@@ -107,9 +107,6 @@ const configs = [
 	}
 ].filter(config => !config.skip);
 
-console.log("Using the following configs");
-console.log(configs);
-
 module.exports = configs;
 
 //wtf
