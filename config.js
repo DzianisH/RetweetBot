@@ -1,3 +1,5 @@
+const standardDenyHosts = ['bit.ly', 'amzn.to', 'goo.gl', 'tiny.cc', 'ow.ly', 'buff.ly', 'instagram.com', 'amazon.com'];
+
 const configs = [
 	{
 		skip: false,
@@ -40,6 +42,7 @@ const configs = [
 		},
 		hashTags: '#lovefood #recipe #recipes #cooking'.split(' '),
 		maxUrlsCount: 1,
+		denyHosts: standardDenyHosts,
 		minPopularity: estimatePopularity(2, 100),
 		minQuotePopularity: estimatePopularity(10, 100),
 		resultType: 'recent',
@@ -68,6 +71,7 @@ const configs = [
 		},
 		hashTags: '#travelblogger #travelblog #travel #traveling'.split(' '),
 		maxUrlsCount: 1,
+		denyHosts: standardDenyHosts,
 		minPopularity: estimatePopularity(2, 100),
 		minQuotePopularity: estimatePopularity(10, 100),
 		resultType: 'recent',
@@ -92,6 +96,7 @@ const configs = [
 		},
 		hashTags: '#yoga #yogi #meditation'.split(' '),
 		maxUrlsCount: 1,
+		denyHosts: standardDenyHosts,
 		minPopularity: estimatePopularity(2, 100),
 		minQuotePopularity: estimatePopularity(10, 100),
 		resultType: 'recent',

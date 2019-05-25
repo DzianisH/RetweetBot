@@ -45,9 +45,10 @@ const Tasks = class Tasks {
 			.filter(status => !!status)
 			.filter(status => !status.possibly_sensitive)
 			.filter(status => !status.retweeted)
-			.filter(status => status.entities.urls.length <= this.config.maxUrlsCount)
 			.filter(status => !status.in_reply_to_status_id && !status.in_reply_to_user_id && !status.in_reply_to_screen_name)
 			.filter(status => !status.retweeted_status)
+			.filter(status => status.entities.urls.length <= this.config.maxUrlsCount)
+			.filter(status => this.config.maxUrlsCount <= 0 || !this.hasDeniedHost(status))
 			.filter(status => this.rtIdList.indexOf(status.id_str) === -1)
 			.map(status => {
 				status.popularity = (status.retweet_count + status.favorite_count) /
@@ -123,6 +124,16 @@ const Tasks = class Tasks {
 		const login = tweet.user.screen_name; // used
 		return randomElement(this.config.quoteProducerList)(login);
 	};
+
+	hasDeniedHost(status) {
+		for (let i = 0; i < status.entities.urls.length; ++i) {
+			let host = new URL(status.entities.urls[i].expanded_url).host;
+			if (this.config.denyHosts.indexOf(host) > -1) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	// will redo later
 	log(text) {
