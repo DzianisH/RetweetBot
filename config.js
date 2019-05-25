@@ -12,7 +12,7 @@ const configs = [
 		},
 		hashTags: '#fitness #fitnessmotivation #gym #workout #bodybuilding'.split(' '),
 		maxUrlsCount: 0,
-		minPopularity: estimatePopularity(4, 100),
+		minPopularity: estimatePopularity(3, 100),
 		minQuotePopularity: estimatePopularity(10, 100),
 		resultType: 'recent',
 		lang: 'en',
@@ -29,7 +29,7 @@ const configs = [
 		// ms
 		errorDelay: 71 * 1000,
 		successDelay: 83 * 60 * 1000,
-		startupDelay: 0
+		startupDelay: 1
 	},
 	{
 		skip: false,
