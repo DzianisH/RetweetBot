@@ -11,6 +11,7 @@ const Tasks = class Tasks {
 	}
 
 	loginTask(callback) {
+		this.log("Woke up for " + this.config.name);
 		this.twitter.get('account/verify_credentials', {
 			include_entities: false,
 			skip_status: true,
@@ -138,7 +139,7 @@ const Tasks = class Tasks {
 	// will redo later
 	log(text) {
 		if (text) {
-			const message = new Date().toISOString() + ' ' +this.config.name + ' ' + text;
+			const message = new Date().toISOString() + ' ' + this.config.name + ' ' + text;
 			if (logToConsole) console.log(message);
 			fs.appendFile('info.log', message + "\n", (err) => {
 				if (err) {
