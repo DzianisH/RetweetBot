@@ -135,9 +135,9 @@ const Tasks = class Tasks {
 					return true;
 				}
 			} catch (e) {
-				this.err(status.entities.urls);
-				this.err(this.config.denyHosts);
-				this.err(null);
+				this.err(null, status.entities.urls);
+				this.err(null, this.config.denyHosts);
+				this.err(null, host);
 				this.err(e,"WTF happened");
 				throw e;
 			}
