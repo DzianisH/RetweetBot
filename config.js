@@ -1,4 +1,5 @@
 const standardDenyHosts = ['bit.ly', 'amzn.to', 'goo.gl', 'tiny.cc', 'ow.ly', 'buff.ly', 'instagram.com', 'amazon.com'];
+const startupDelayAdder = 7000;
 
 const configs = [
 	{
@@ -12,7 +13,7 @@ const configs = [
 		},
 		hashTags: '#fitness #fitnessmotivation #gym #workout #bodybuilding'.split(' '),
 		maxUrlsCount: 0,
-		minPopularity: estimatePopularity(3, 100),
+		minPopularity: estimatePopularity(4, 100),
 		minQuotePopularity: estimatePopularity(10, 100),
 		resultType: 'recent',
 		lang: 'en',
@@ -59,7 +60,7 @@ const configs = [
 		// ms
 		errorDelay: 71 * 1000,
 		successDelay: 83 * 60 * 1000,
-		startupDelay: 1001
+		startupDelay: startupDelayAdder
 	},
 	{
 		skip: false,
@@ -90,7 +91,7 @@ const configs = [
 		// ms
 		errorDelay: 71 * 1000,
 		successDelay: 83 * 60 * 1000,
-		startupDelay: 2002
+		startupDelay: 2 * startupDelayAdder
 	},
 	{
 		skip: false,
@@ -122,7 +123,7 @@ const configs = [
 		// ms
 		errorDelay: 71 * 1000,
 		successDelay: 83 * 60 * 1000,
-		startupDelay: 3003
+		startupDelay: 3 * startupDelayAdder
 	}
 ].filter(config => !config.skip);
 
