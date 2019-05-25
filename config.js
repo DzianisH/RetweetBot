@@ -10,14 +10,14 @@ const configs = [
 			access_token: process.env.FIT_ACCESS_TOKEN || '',
 			access_token_secret: process.env.FIT_ACCESS_TOKEN_SECRET || ''
 		},
-		hashTags: '#fitness #fitnessmotivation #lifting #gym #workout #bodybuilding'.split(' '),
+		hashTags: '#fitness #fitnessmotivation #gym #workout #bodybuilding'.split(' '),
 		maxUrlsCount: 0,
-		minPopularity: estimatePopularity(2, 100),
-		minQuotePopularity: estimatePopularity(7, 100),
+		minPopularity: estimatePopularity(4, 100),
+		minQuotePopularity: estimatePopularity(10, 100),
 		resultType: 'recent',
 		lang: 'en',
 		count: 100,
-		quoteRate: 0.13, // probability
+		quoteRate: 0.25, // probability
 		quoteProducerList: [
 			(login) => `Check @${login} tweet out!`,
 			(login) => `Take a look at @${login}'s post!`,
@@ -28,7 +28,7 @@ const configs = [
 		],
 		// ms
 		errorDelay: 71 * 1000,
-		successDelay: 42 * 60 * 1000,
+		successDelay: 83 * 60 * 1000,
 		startupDelay: 0
 	},
 	{
@@ -41,22 +41,23 @@ const configs = [
 			access_token_secret: process.env.COOK_ACCESS_TOKEN_SECRET || ''
 		},
 		hashTags: '#lovefood #recipe #recipes #cooking'.split(' '),
-		maxUrlsCount: 1,
+		maxUrlsCount: 99,
 		denyHosts: standardDenyHosts,
-		minPopularity: estimatePopularity(2, 100),
+		minPopularity: estimatePopularity(4, 100),
 		minQuotePopularity: estimatePopularity(10, 100),
 		resultType: 'recent',
 		lang: 'en',
 		count: 100,
-		quoteRate: 0.09,
+		quoteRate: 0.11,
 		quoteProducerList: [
 			(login) => `@${login} tweeted new delicious.`,
 			(login) => `@${login} posted tweet today.`,
 			(login) => `New recipe from @${login}.`,
-			(login) => `Yummy stuff @${login} has tweeted.`
+			(login) => `Yummy stuff @${login} has tweeted.`,
+			(login) => `I guess this tweet from @${login} can be useful for those, likes to cook.`,
 		],
 		// ms
-		errorDelay: 63 * 1000,
+		errorDelay: 71 * 1000,
 		successDelay: 83 * 60 * 1000,
 		startupDelay: 1001
 	},
@@ -69,20 +70,26 @@ const configs = [
 			access_token: process.env.TRAVEL_ACCESS_TOKEN || '',
 			access_token_secret: process.env.TRAVEL_ACCESS_TOKEN_SECRET || ''
 		},
-		hashTags: '#travelblogger #travelblog #travel #traveling'.split(' '),
+		hashTags: '#travelblogger #travelblog #travel #traveling #travelphotography'.split(' '),
 		maxUrlsCount: 1,
 		denyHosts: standardDenyHosts,
-		minPopularity: estimatePopularity(2, 100),
+		minPopularity: estimatePopularity(4, 100),
 		minQuotePopularity: estimatePopularity(10, 100),
 		resultType: 'recent',
 		lang: 'en',
 		count: 100,
-		quoteRate: 0,
+		quoteRate: 0.11,
 		quoteProducerList: [
+			(login) => `@${login} tweeted today.`,
+			(login) => `@${login} posted tweet today.`,
+			(login) => `New travel post from @${login}.`,
+			(login) => `Take a look at @${login}'s tweet!`,
+			(login) => `Take a look at @${login}'s post!`,
+			(login) => `I guess this tweet from @${login} can be useful for those, likes to travel.`,
 		],
 		// ms
-		errorDelay: 63 * 1000,
-		successDelay: 63 * 60 * 1000,
+		errorDelay: 71 * 1000,
+		successDelay: 83 * 60 * 1000,
 		startupDelay: 2002
 	},
 	{
@@ -94,20 +101,26 @@ const configs = [
 			access_token: process.env.YOGA_ACCESS_TOKEN || '',
 			access_token_secret: process.env.YOGA_ACCESS_TOKEN_SECRET || ''
 		},
-		hashTags: '#yoga #yogi #meditation'.split(' '),
+		hashTags: '#yoga #yogi #meditation #YogaTTC #yogaeveryday'.split(' '),
 		maxUrlsCount: 1,
 		denyHosts: standardDenyHosts,
-		minPopularity: estimatePopularity(2, 100),
+		minPopularity: estimatePopularity(4, 100),
 		minQuotePopularity: estimatePopularity(10, 100),
 		resultType: 'recent',
 		lang: 'en',
 		count: 100,
-		quoteRate: 0,
+		quoteRate: 0.11,
 		quoteProducerList: [
+			(login) => `@${login} tweeted today.`,
+			(login) => `@${login} posted tweet today.`,
+			(login) => `New yoga post from @${login}.`,
+			(login) => `Take a look at @${login}'s tweet!`,
+			(login) => `Take a look at @${login}'s post!`,
+			(login) => `I guess this tweet from @${login} can be useful for those, who practice yoga.`,
 		],
 		// ms
-		errorDelay: 63 * 1000,
-		successDelay: 38 * 60 * 1000,
+		errorDelay: 71 * 1000,
+		successDelay: 83 * 60 * 1000,
 		startupDelay: 3003
 	}
 ].filter(config => !config.skip);
