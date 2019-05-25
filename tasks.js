@@ -128,9 +128,13 @@ const Tasks = class Tasks {
 
 	hasDeniedHost(status) {
 		for (let i = 0; i < status.entities.urls.length; ++i) {
-			let host = new URL(status.entities.urls[i].expanded_url).host;
-			if (this.config.denyHosts.indexOf(host) > -1) {
-				return true;
+			try {
+				let host = new URL(status.entities.urls[i].expanded_url).host;
+				if (this.config.denyHosts.indexOf(host) > -1) {
+					return true;
+				}
+			} catch (e) {
+				this.err(e,"WTF happened");
 			}
 		}
 		return false;
