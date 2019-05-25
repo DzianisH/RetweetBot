@@ -23,3 +23,5 @@ configs.forEach(config => {
 
 	setTimeout(() => botLoop(), config.startupDelay);
 });
+
+console.log("Bot(s) has been scheduled.");
