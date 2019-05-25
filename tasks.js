@@ -127,14 +127,19 @@ const Tasks = class Tasks {
 	};
 
 	hasDeniedHost(status) {
+		let host = null;
 		for (let i = 0; i < status.entities.urls.length; ++i) {
 			try {
-				let host = new URL(status.entities.urls[i].expanded_url).host;
+				host = new URL(status.entities.urls[i].expanded_url).host;
 				if (this.config.denyHosts.indexOf(host) > -1) {
 					return true;
 				}
 			} catch (e) {
+				this.err(status.entities.urls);
+				this.err(this.config.denyHosts);
+				this.err(null);
 				this.err(e,"WTF happened");
+				throw e;
 			}
 		}
 		return false;
