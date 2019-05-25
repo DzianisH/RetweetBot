@@ -101,6 +101,7 @@ const configs = [
 			access_token: process.env.YOGA_ACCESS_TOKEN || '',
 			access_token_secret: process.env.YOGA_ACCESS_TOKEN_SECRET || ''
 		},
+		// filter #yogapants
 		hashTags: '#yoga #yogi #meditation #YogaTTC #yogaeveryday'.split(' '),
 		maxUrlsCount: 1,
 		denyHosts: standardDenyHosts,
