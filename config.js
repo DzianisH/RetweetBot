@@ -64,14 +64,14 @@ const configs = [
 	},
 	{
 		skip: false,
-		name: 'travel_blogger',
+		name: 'travel',
 		twitter: {
 			consumer_key: process.env.TRAVEL_CONSUMENR_KEY || '',
 			consumer_secret: process.env.TRAVEL_CONSUMENR_SECRET || '',
 			access_token: process.env.TRAVEL_ACCESS_TOKEN || '',
 			access_token_secret: process.env.TRAVEL_ACCESS_TOKEN_SECRET || ''
 		},
-		hashTags: '#travelblogger #travelblog #travel #traveling #travelphotography'.split(' '),
+		hashTags: '#travelblogger #travelblog #travel #traveling #travelphotography #travelphoto #exprole #nature'.split(' '),
 		maxUrlsCount: 1,
 		denyHosts: standardDenyHosts,
 		minPopularity: estimatePopularity(4, 100),
