@@ -86,7 +86,7 @@ const configs = [
 			(login) => `New travel post from @${login}.`,
 			(login) => `Take a look at @${login}'s tweet!`,
 			(login) => `Take a look at @${login}'s post!`,
-			(login) => `I guess this tweet from @${login} can be useful for those, likes to travel.`,
+			(login) => `I guess this tweet from @${login} can be useful for those, who likes to travel.`,
 		],
 		// ms
 		errorDelay: 71 * 1000,
