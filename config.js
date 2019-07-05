@@ -71,7 +71,7 @@ const configs = [
 			access_token: process.env.TRAVEL_ACCESS_TOKEN || '',
 			access_token_secret: process.env.TRAVEL_ACCESS_TOKEN_SECRET || ''
 		},
-		hashTags: '#travelblogger #travelblog #travel #traveling #travelphotography #travelphoto #exprole #nature'.split(' '),
+		hashTags: '#travelblogger #travelblog #travel #earthporn #traveling #travelphotography #travelphoto #exprole #nature'.split(' '),
 		maxUrlsCount: 1,
 		denyHosts: standardDenyHosts,
 		minPopularity: estimatePopularity(4, 100),
