@@ -111,7 +111,7 @@ const configs = [
 		resultType: 'recent',
 		lang: 'en',
 		count: 100,
-		quoteRate: 0.11,
+		quoteRate: 0.15,
 		quoteProducerList: [
 			(login) => `@${login} tweeted today.`,
 			(login) => `@${login} posted tweet today.`,
@@ -124,6 +124,37 @@ const configs = [
 		errorDelay: 71 * 1000,
 		successDelay: 83 * 60 * 1000,
 		startupDelay: 3 * startupDelayAdder
+	},
+	{
+		skip: false,
+		name: 'gamedev',
+		twitter: {
+			consumer_key: process.env.GAMEDEV_CONSUMENR_KEY || '',
+			consumer_secret: process.env.GAMEDEV_CONSUMENR_SECRET || '',
+			access_token: process.env.GAMEDEV_ACCESS_TOKEN || '',
+			access_token_secret: process.env.GAMEDEV_ACCESS_TOKEN_SECRET || ''
+		},
+		hashTags: '#gamedev #indiedev #screenshots #screenshot #games'.split(' '),
+		maxUrlsCount: 1,
+		denyHosts: standardDenyHosts,
+		minPopularity: estimatePopularity(4, 100),
+		minQuotePopularity: estimatePopularity(10, 100),
+		resultType: 'recent',
+		lang: 'en',
+		count: 100,
+		quoteRate: 0.1,
+		quoteProducerList: [
+			(login) => `@${login} tweeted today.`,
+			(login) => `@${login} posted today.`,
+			(login) => `New #gaming post from @${login}.`,
+			(login) => `Take a look at @${login}'s tweet!`,
+			(login) => `Take a look at @${login}'s post!`,
+			(login) => `Guys, check this out.`,
+		],
+		// ms
+		errorDelay: 71 * 1000,
+		successDelay: 83 * 60 * 1000,
+		startupDelay: 4 * startupDelayAdder
 	}
 ].filter(config => !config.skip);
 
