@@ -54,9 +54,9 @@ const configs = [
 			(login) => `@${login} tweeted new delicious.`,
 			(login) => `@${login} posted tweet today.`,
 			(login) => `New recipe from @${login}.`,
-			(login) => `Yummy stuff @${login} has tweeted.`,
-			(login) => `I guess this tweet from @${login} can be useful for those, who likes to cook.`,
-			(login) => `You should have to look on this stuff from @${login}.`,
+			(login) => `@${login} has tweeted yummy stuff :)`,
+			(login) => `I guess this tweet from @${login} can be useful for those, who like to cook.`,
+			(login) => `You should take a look on this stuff from @${login}.`,
 		],
 		// ms
 		errorDelay: 71 * 1000,
@@ -87,7 +87,7 @@ const configs = [
 			(login) => `New travel post from @${login}.`,
 			(login) => `Take a look at @${login}'s tweet!`,
 			(login) => `Take a look at @${login}'s post!`,
-			(login) => `I guess this tweet from @${login} can be useful for those, who likes to travel.`,
+			(login) => `I guess this tweet from @${login} can be useful for those, who like to travel.`,
 		],
 		// ms
 		errorDelay: 71 * 1000,
